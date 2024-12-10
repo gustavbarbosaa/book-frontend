@@ -35,7 +35,11 @@ const data = {
         {
           title: "Listar usuários",
           url: "/usuarios",
-        }
+        },
+        {
+          title: "Cadastrar usuário",
+          url: "/cadastrar/usuario",
+        },
       ]
     },
     {

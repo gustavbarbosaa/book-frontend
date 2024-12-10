@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
-// Atualizando as validações do Zod
 const registerBookValidation = z.object({
   titulo: z.string({message: "Título obrigatório!"}).min(3, { message: "O título deve ter no mínimo 3 caracteres!" }),
   escritor: z.string({message: "Escritor obrigatório!"}).min(3, { message: "O nome do escritor deve ter no mínimo 3 caracteres!" }),
@@ -185,7 +184,6 @@ function RegisterBook() {
                     </FormItem>
                   )}
                 />
-
               <Button type="submit" className="w-full">Cadastrar livro</Button>
             </div>
           </form>
