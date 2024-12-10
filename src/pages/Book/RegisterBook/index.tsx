@@ -5,13 +5,12 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useState } from "react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 // Atualizando as validações do Zod
 const registerBookValidation = z.object({
@@ -22,20 +21,19 @@ const registerBookValidation = z.object({
     message: "A edição deve ser um número válido!",
   }),
   isbn: z.string({message: "ISBN obrigatório!"}).min(5, { message: "O ISBN deve ter no mínimo 5 caracteres!" }),
-  
-  // .regex(/^\d{3}-\d{1,5}-\d{1,7}-\d{1,7}-\d{1,3}$/, {
-  //   message: "O ISBN deve seguir o formato correto!",
-  // }),
-  categoria: z.string({message: "Categoria obrigatório!"}).min(3, { message: "A categoria deve ter no mínimo 3 caracteres!" }),
-  dataPublicacao: z.date(),
-  genero: z.string(),
+  dataPublicacao: z.string().refine((val) => {
+    const date = new Date(val);
+    return !isNaN(date.getTime()) && date <= new Date() && date >= new Date("1900-01-01");
+  }, {
+    message: "Informe uma data válida entre 1900 e hoje.",
+  }),
+  genero: z.string().nonempty({message: "O gênero é obrigatório!"}),
 });
 
 type RegisterBookSchema = z.infer<typeof registerBookValidation>;
 
 function RegisterBook() {
-  const [date, setDate] = useState<Date>();
-  const { register, handleSubmit, formState: { errors, isSubmitted } } = useForm<RegisterBookSchema>({
+  const form = useForm<RegisterBookSchema>({
     resolver: zodResolver(registerBookValidation),
   });
 
@@ -46,164 +44,152 @@ function RegisterBook() {
   return (
     <div className="flex items-center justify-center flex-1 h-full bg-background-image bg-no-repeat bg-cover bg-center p-8">
       <div className="flex flex-col items-center justify-center gap-2 bg-secondary rounded w-full h-full drop-shadow-sm">
-        <h2 className="md:text-5xl font-bold font-roboto">Cadastrar livros</h2>
-        <form onSubmit={handleSubmit(registerBook)} className="w-full flex flex-col items-center justify-center">
-          <div className="flex flex-col items-center justify-center gap-2 border w-1/2 p-4 rounded">
-            <div className="w-full">
-              <Label htmlFor="titulo" className="block text-sm font-medium text-gray-700">
-                Título do livro
-              </Label>
-              <Input
-                type="text"
-                id="titulo"
-                placeholder="Insira o titulo do livro"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('titulo')}
-              />
-              {isSubmitted && errors.titulo && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.titulo.message}</small>
-              )}
-            </div>
+        <div className="p-8">
+          <h2 className="md:text-5xl font-bold font-roboto">Cadastrar livros</h2>
+        </div>
 
-            <div className="w-full">
-              <Label htmlFor="escritor" className="block text-sm font-medium text-gray-700">
-                Escritor
-              </Label>
-              <Input
-                type="text"
-                id="escritor"
-                placeholder="Insira o escritor do livro"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('escritor')}
-              />
-              {isSubmitted && errors.escritor && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.escritor.message}</small>
-              )}
-            </div>
-
-            <div className="w-full">
-              <Label htmlFor="editora" className="block text-sm font-medium text-gray-700">
-                Editora
-              </Label>
-              <Input
-                type="text"
-                id="editora"
-                placeholder="Insira a editora"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('editora')}
-              />
-              {isSubmitted && errors.editora && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.editora.message}</small>
-              )}
-            </div>
-
-            <div className="w-full">
-              <Label htmlFor="edicao" className="block text-sm font-medium text-gray-700">
-                Edição
-              </Label>
-              <Input
-                type="text"
-                id="edicao"
-                placeholder="Insira a edição do livro"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('edicao')}
-              />
-              {isSubmitted && errors.edicao && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.edicao.message}</small>
-              )}
-            </div>
-
-            <div className="w-full">
-              <Label htmlFor="isbn" className="block text-sm font-medium text-gray-700">
-                ISBN
-              </Label>
-              <Input
-                type="text"
-                id="isbn"
-                placeholder="Insira o ISBN"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('isbn')}
-              />
-              {isSubmitted && errors.isbn && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.isbn.message}</small>
-              )}
-            </div>
-
-            <div className="w-full">
-              <Label htmlFor="categoria" className="block text-sm font-medium text-gray-700">
-                Categoria
-              </Label>
-              <Input
-                type="text"
-                id="categoria"
-                placeholder="Insira a categoria do livro"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register('categoria')}
-              />
-              {isSubmitted && errors.categoria && (
-                <small className="text-red-600 font-medium font-poppins p-2">{errors.categoria.message}</small>
-              )}
-            </div>
-
-            <div className="flex items-center w-full gap-2">
-              <div className="w-full">
-                <Label htmlFor="dataPublicacao" className="block text-sm font-medium text-gray-700">
-                  Data de publicação
-                </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon />
-                      {date ? format(date, "PPP", { locale: ptBR }) : <span>Escolha uma data</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      {...register('dataPublicacao')}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {isSubmitted && errors.dataPublicacao && (
-                  <small className="text-red-600 font-medium font-poppins p-2">{errors.dataPublicacao.message}</small>
-                )}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(registerBook)} className="w-1/2 space-y-8">
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="w-full flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="titulo"
+                  render={({field}) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Título</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Insira o título do livo" {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="escritor"
+                  render={({field}) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Escritor</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Informe o escritor do livro..." {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+                <FormField
+                  control={form.control}
+                  name="editora"
+                  render={({field}) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Editora</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Informe a editora..." {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="edicao"
+                  render={({field}) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Edição</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Informe a edição do livro..." {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="genero"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Gênero</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value)}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecione o gênero..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="acao">Ação</SelectItem>
+                          <SelectItem value="aventura">Aventura</SelectItem>
+                          <SelectItem value="comedia">Comédia</SelectItem>
+                          <SelectItem value="drama">Drama</SelectItem>
+                          <SelectItem value="fantasia">Fantasia</SelectItem>
+                          <SelectItem value="terror">Terror</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dataPublicacao"
+                  render={({ field }) => (
+                    <FormItem className="w-full flex flex-col">
+                      <FormLabel>Data de publicação</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-[240px] pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(new Date(field.value), "PPP", { locale: ptBR })
+                              ) : (
+                                <span>Selecione a data</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value ? new Date(field.value) : undefined}
+                            onSelect={(date) => field.onChange(date?.toISOString() || null)}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isbn"
+                  render={({field}) => (
+                    <FormItem className="w-full">
+                      <FormLabel>ISBN</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Informe o ISBN..." {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <div className="w-full">
-                <Label htmlFor="genero" className="block text-sm font-medium text-gray-700">
-                  Selecione o gênero
-                </Label>
-                <Select {...register('genero')}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o gênero" />
-                  </SelectTrigger>
-                  <SelectContent  >
-                    <SelectItem value="acao">Ação</SelectItem>
-                    <SelectItem value="aventura">Aventura</SelectItem>
-                    <SelectItem value="comedia">Comédia</SelectItem>
-                    <SelectItem value="drama">Drama</SelectItem>
-                    <SelectItem value="fantasia">Fantasia</SelectItem>
-                    <SelectItem value="terror">Terror</SelectItem>
-                  </SelectContent>
-                </Select>
-                {isSubmitted && errors.genero && (
-                  <small className="text-red-600 font-medium font-poppins p-2">{errors.genero.message}</small>
-                )}
-              </div>
+              <Button type="submit" className="w-full">Cadastrar livro</Button>
             </div>
-
-            <Button className="w-full" type="submit">Cadastrar livro</Button>
-          </div>
-        </form>
+          </form>
+        </Form>
       </div>
     </div>
   );
