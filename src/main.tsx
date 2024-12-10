@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import './index.css'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import RegisterBook from './pages/Book/RegisterBook'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/cadastrar',
         element: <Register />
+      },
+      {
+        path: '/cadastrar/livro',
+        element: <RegisterBook />
       }
     ]
   }
