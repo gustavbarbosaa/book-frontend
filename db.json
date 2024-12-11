@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": "3660",
+      "name": "Gustavo",
+      "email": "gustavoaraujohab@gmail.com",
+      "password": "guga1957",
+      "phone": "83991148935",
+      "cpf": "13556188430",
+      "typeUser": "usuario",
+      "address": {
+        "number": "123",
+        "road": "Galdino Vilante Santos",
+        "neighborhood": "Casas Populares",
+        "city": "Cajazeiras",
+        "postalCode": "12345-678",
+        "state": "PB"
+      }
+    }
+  ],
+  "books": [
+    {
+      "id": "2fff",
+      "titulo": "Teste",
+      "escritor": "Teste",
+      "editora": "Teste",
+      "edicao": "4",
+      "isbn": "123456",
+      "dataPublicacao": "2024-12-10T03:00:00.000Z",
+      "genero": "aventura"
+    }
+  ],
+  "transactions": []
+}

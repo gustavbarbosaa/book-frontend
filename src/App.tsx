@@ -6,7 +6,7 @@ import { AppSidebar } from './components/Sidebar/AppSideBar'
 function App() {
 
   const location = useLocation()
-  const hideSideBar = location.pathname === "/login" || location.pathname === "/cadastrar"
+  const hideSideBar = location.pathname === "/login" || location.pathname === "/cadastrar/usuario"
 
   return (
     <div className='h-screen flex'>

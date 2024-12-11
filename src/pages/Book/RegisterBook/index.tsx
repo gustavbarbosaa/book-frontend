@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { registerBookService } from "@/services/Book/registerBookService";
 
 const registerBookValidation = z.object({
   titulo: z.string({message: "Título obrigatório!"}).min(3, { message: "O título deve ter no mínimo 3 caracteres!" }),
@@ -36,13 +37,20 @@ function RegisterBook() {
     resolver: zodResolver(registerBookValidation),
   });
 
-  const registerBook = (data: RegisterBookSchema) => {
-    console.log(data);
+  const registerBook = async (data: RegisterBookSchema) => {
+    try {
+      const response = await registerBookService.registerBook(data)
+      console.log(response)
+      form.reset()
+    } catch (error) {
+      console.log("Erro ao cadastrar livro: " + error)
+      throw error
+    }
   };
 
   return (
     <div className="flex items-center justify-center flex-1 h-full bg-background-image bg-no-repeat bg-cover bg-center p-8">
-      <div className="flex flex-col items-center justify-center gap-2 bg-secondary rounded w-full h-full drop-shadow-sm">
+      <div className="flex flex-col items-center justify-center gap-2 bg-white rounded w-full h-full drop-shadow-sm">
         <div className="p-8">
           <h2 className="md:text-5xl font-bold font-roboto">Cadastrar livros</h2>
         </div>

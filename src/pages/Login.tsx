@@ -71,7 +71,7 @@ function Login() {
           </div>
           <Button className="w-full" type="submit">Entrar</Button>
           <Separator><span className="font-thin font-poppins">OU</span></Separator>
-          <a href="/cadastrar" className="w-full">
+          <a href="/cadastrar/usuario" className="w-full">
             <Button type="button" className="w-full">Criar conta</Button>
           </a>
         </form>

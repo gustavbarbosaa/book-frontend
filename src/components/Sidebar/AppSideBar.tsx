@@ -36,10 +36,6 @@ const data = {
           title: "Listar usuários",
           url: "/usuarios",
         },
-        {
-          title: "Cadastrar usuário",
-          url: "/cadastrar/usuario",
-        },
       ]
     },
     {
@@ -115,10 +111,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <Button>
-          Sair 
-          <LogOut/>
-        </Button>
+        <a href="/login" className="w-full">
+          <Button type="button" className="w-full">
+            Sair 
+            <LogOut/>
+          </Button>
+        </a>
       </SidebarFooter>
     </Sidebar>
   )

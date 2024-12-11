@@ -3,6 +3,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { IbgeService } from "@/services/Cities/ibgeService";
+import { registerUserService } from "@/services/User/registerUserService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -68,12 +69,26 @@ function RegisterUSer() {
     resolver: zodResolver(registerUserValidation),
   });
 
-  const registerUser = (data: RegisterUserSchema) => {
-    console.log(data);
+  const registerUser = async (data: RegisterUserSchema) => {
+    try {
+      const response = await registerUserService.registerUser(data)
+      console.log(response)
+      form.reset()
+    } catch (error) {
+      console.log("Erro ao cadastrar usuário: " + error)
+      throw error
+    }
   };
 
   return (
-    <div className="flex items-center justify-center flex-1 h-full bg-background-image bg-no-repeat bg-cover bg-center p-8">
+    <div className="flex items-center justify-center flex-1 h-full bg-background-image bg-no-repeat bg-cover bg-center gap-4 p-8">
+      <div className="relative p-4 flex items-center justify-around flex-col text-white rounded text-center bg-primary h-full">
+        <img src="/src/assets/images/full-logo-white.webp" alt="" />
+        <h1 className="font-bold font-poppins text-3xl md:text-5xl">
+          BEM VINDO AO <span className="text-tertiary">READIFY</span>
+        </h1>
+        <h2 className="font-medium font-poppins text-xl md:text-2xl">Insira os dados para cadastrar um usuário!</h2>
+      </div>
       <div className="flex flex-col items-center justify-center gap-2 bg-secondary rounded w-full h-full drop-shadow-sm">
         <div className="p-8">
           <h2 className="md:text-5xl font-bold font-roboto">Cadastrar usuário</h2>
@@ -88,7 +103,7 @@ function RegisterUSer() {
                   name="name"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Nome</FormLabel>
+                      <FormLabel>Nome <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input placeholder="Insira o nome do usuário" {...field}/>
                       </FormControl>
@@ -101,7 +116,7 @@ function RegisterUSer() {
                   name="email"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Email <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="Informe o email do usuário..." {...field}/>
                       </FormControl>
@@ -115,7 +130,7 @@ function RegisterUSer() {
                   name="password"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel>Senha <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="Informe a senha do usuarío..." {...field}/>
                       </FormControl>
@@ -129,7 +144,7 @@ function RegisterUSer() {
                   name="phone"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Telefone</FormLabel>
+                      <FormLabel>Telefone <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input type="tel" placeholder="Informe o telefone do usuário..." {...field}/>
                       </FormControl>
@@ -142,7 +157,7 @@ function RegisterUSer() {
                   name="cpf"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>CPF</FormLabel>
+                      <FormLabel>CPF <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input placeholder="Informe o CPF do usuário..." {...field}/>
                       </FormControl>
@@ -156,7 +171,7 @@ function RegisterUSer() {
                   name="typeUser"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Tipo de usuário</FormLabel>
+                      <FormLabel>Tipo de usuário <span className="text-red-500 font-bold">*</span></FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(value)}
                         value={field.value}
@@ -192,7 +207,7 @@ function RegisterUSer() {
                   name="address.road"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Rua</FormLabel>
+                      <FormLabel>Rua <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input placeholder="Informe o nome da rua..." {...field}/>
                       </FormControl>
@@ -205,7 +220,7 @@ function RegisterUSer() {
                   name="address.neighborhood"
                   render={({field}) => (
                     <FormItem className="w-full">
-                      <FormLabel>Bairro</FormLabel>
+                      <FormLabel>Bairro <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input placeholder="Informe o bairro..." {...field}/>
                       </FormControl>
@@ -220,7 +235,7 @@ function RegisterUSer() {
                   name="address.state"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Estado</FormLabel>
+                      <FormLabel>Estado <span className="text-red-500 font-bold">*</span></FormLabel>
                       <Select
                         onValueChange={(value) => {
                           field.onChange(value);
@@ -248,7 +263,7 @@ function RegisterUSer() {
                   name="address.city"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Cidade</FormLabel>
+                      <FormLabel>Cidade <span className="text-red-500 font-bold">*</span></FormLabel>
                       <Select
                         onValueChange={(value) => {
                           field.onChange(value);
@@ -277,7 +292,7 @@ function RegisterUSer() {
                   name="address.postalCode"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>CEP</FormLabel>
+                      <FormLabel>CEP <span className="text-red-500 font-bold">*</span></FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Informe o CEP..."
