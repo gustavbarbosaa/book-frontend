@@ -9,6 +9,8 @@ import RegisterBook from './pages/Book/RegisterBook'
 import RegisterUSer from './pages/User/RegisterUser'
 import ListUsers from './pages/User/ListUsers'
 import ListBooks from './pages/Book/ListBooks'
+import RegisterTransaction from './pages/Transaction/RegisterTransaction'
+import ListTransactions from './pages/Transaction/ListTransactions'
 
 const router = createBrowserRouter([
   {
@@ -39,7 +41,15 @@ const router = createBrowserRouter([
       {
         path: '/livros',
         element: <ListBooks />
-      }
+      },
+      {
+        path: '/cadastrar/emprestimo',
+        element: <RegisterTransaction />
+      },
+      {
+        path: '/emprestimos',
+        element: <ListTransactions />
+      },
     ]
   }
 ])

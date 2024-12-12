@@ -58,11 +58,11 @@ const data = {
       items: [
         {
           title: "Realizar empréstimo",
-          url: "/emprestimo",
+          url: "/cadastrar/emprestimo",
         },
         {
           title: "Listar empréstimos",
-          url: "/listar/emprestimo",
+          url: "/emprestimos",
         }
       ]
     }

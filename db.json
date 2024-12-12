@@ -30,5 +30,11 @@
       "genero": "aventura"
     }
   ],
-  "transactions": []
+  "transactions": [
+    {
+      "id": "c8c4",
+      "user": "Gustavo",
+      "book": "Teste"
+    }
+  ]
 }
